@@ -1,0 +1,6 @@
+{
+  "name": "CUET Geophysics",
+  "description": "CUET Geophysics Quiz preparation app featuring questions, in-depth explanations, daily streak tracking, and interactive streak widget.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

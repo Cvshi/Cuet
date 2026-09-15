@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CUET Geophysics</string>
+    <string name="widget_title">Daily Streak</string>
+    <string name="widget_action_quiz">Take Daily Quiz</string>
+</resources>
