@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CUET Geophysics - Daily Streak & Exam Prep</title>
+  <style>
+    :root {
+      --bg-dark: #0B1325;
+      --card-bg: #131E33;
+      --card-border: #1E2D4A;
+      --accent-cyan: #38BDF8;
+      --accent-cyan-dark: #0284C7;
+      --accent-orange: #FB923C;
+      --accent-gold: #FBBF24;
+      --accent-green: #10B981;
+      --accent-red: #EF4444;
+      --text-main: #FFFFFF;
+      --text-sub: #94A3B8;
+      --text-muted: #64748B;
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 680px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--bg-dark);
+      position: relative;
+    }
+
+    /* Top Bar */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background-color: rgba(11, 19, 37, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0284C7, #0369A1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .brand-text h1 {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+
+    .brand-text p {
+      font-size: 11px;
+      color: var(--accent-cyan);
+      font-weight: 500;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .streak-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #1E293B;
+      border: 1px solid rgba(251, 146, 60, 0.4);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #FFF;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    .streak-badge:active {
+      transform: scale(0.95);
+    }
+
+    .btn-icon {
+      background: transparent;
+      border: none;
+      color: var(--text-sub);
+      font-size: 18px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .btn-icon:hover {
+      background: #1E293B;
+      color: #FFF;
+    }
+
+    /* Main Content Area */
+    main {
+      flex: 1;
+      padding: 18px 18px 36px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 18px;
+      transition: border-color 0.2s ease, transform 0.15s ease;
+    }
+
+    /* Streak Widget Hero Card */
+    .streak-card {
+      background: linear-gradient(145deg, #131E35, #16243F);
+      border: 1px solid rgba(251, 146, 60, 0.35);
+      box-shadow: 0 8px 24px -6px rgba(251, 146, 60, 0.15);
+    }
+
+    .streak-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .streak-flame-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .flame-icon {
+      font-size: 32px;
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .streak-count {
+      font-size: 26px;
+      font-weight: 900;
+      color: #FFF;
+      line-height: 1;
+    }
+
+    .streak-label {
+      font-size: 12px;
+      color: var(--accent-orange);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .streak-status-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: rgba(251, 146, 60, 0.18);
+      color: var(--accent-orange);
+      border: 1px solid rgba(251, 146, 60, 0.3);
+    }
+
+    .streak-status-pill.done {
+      background: rgba(16, 185, 129, 0.18);
+      color: var(--accent-green);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    /* Week Day Dots */
+    .week-dots {
+      display: flex;
+      justify-content: space-between;
+      margin: 14px 0 16px 0;
+      background: #0D1628;
+      padding: 10px 14px;
+      border-radius: 12px;
+    }
+
+    .day-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .day-name {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .day-circle {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #2B3A55;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+
+    .day-circle.active {
+      background: var(--accent-orange);
+      border-color: var(--accent-orange);
+      color: #FFF;
+    }
+
+    .streak-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #F97316, #EA580C);
+      color: #FFF;
+      border: none;
+      border-radius: 12px;
+      padding: 13px;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+
+    .streak-btn:active {
+      transform: scale(0.98);
+      filter: brightness(0.95);
+    }
+
+    /* Quick Grid */
+    .action-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .action-card {
+      background: #142036;
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .action-card:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-2px);
+    }
+
+    .action-icon {
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+
+    .action-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #FFF;
+    }
+
+    .action-subtitle {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    /* Chapter List */
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-top: 6px;
+    }
+
+    .section-title h2 {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .section-title span {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .chapter-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 18px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .chapter-card:hover {
+      border-color: #38BDF8;
+      background: #15223A;
+    }
+
+    .chapter-badge {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .chapter-badge.c1 { color: #38BDF8; }
+    .chapter-badge.c2 { color: #34D399; }
+    .chapter-badge.c3 { color: #FBBF24; }
+
+    .chapter-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #FFF;
+    }
+
+    .chapter-desc {
+      font-size: 12px;
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
+
+    .chapter-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .chapter-start-text {
+      color: #38BDF8;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Quiz Screen View */
+    .quiz-progress-bar {
+      width: 100%;
+      height: 6px;
+      background: #1E293B;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .quiz-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0284C7, #38BDF8);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .quiz-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--accent-cyan);
+    }
+
+    .timer-badge {
+      background: #1E293B;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-weight: 700;
+      color: #FFF;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .question-box {
+      background: #131F37;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+
+    .topic-pill {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      background: rgba(56, 189, 248, 0.12);
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    .question-text {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.6;
+      color: #FFF;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-btn {
+      background: #131E33;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      text-align: left;
+      color: #E2E8F0;
+      font-size: 14px;
+      line-height: 1.4;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      transition: all 0.15s ease;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--accent-cyan);
+      background: #182642;
+    }
+
+    .option-letter {
+      font-weight: 700;
+      color: var(--accent-cyan);
+      min-width: 22px;
+    }
+
+    .option-btn.correct {
+      background: rgba(16, 185, 129, 0.15) !important;
+      border-color: var(--accent-green) !important;
+      color: #FFF !important;
+    }
+
+    .option-btn.wrong {
+      background: rgba(239, 68, 68, 0.15) !important;
+      border-color: var(--accent-red) !important;
+      color: #FFF !important;
+    }
+
+    /* Explanation Card */
+    .explanation-card {
+      background: #0E182A;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .explanation-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--accent-green);
+    }
+
+    .explanation-text {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #CBD5E1;
+    }
+
+    .formula-takeaway {
+      background: #14213B;
+      border-left: 3px solid var(--accent-gold);
+      padding: 8px 12px;
+      border-radius: 4px 8px 8px 4px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #FEF08A;
+      font-family: monospace;
+    }
+
+    /* Quiz Navigation Bar */
+    .quiz-bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: #CBD5E1;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--accent-cyan-dark);
+      border: none;
+      color: #FFF;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    /* Search & Filter in Notes */
+    .search-input {
+      width: 100%;
+      background: #131F37;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: #FFF;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent-cyan);
+    }
+
+    .chip-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .chip {
+      white-space: nowrap;
+      background: #131E33;
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-sub);
+      cursor: pointer;
+    }
+
+    .chip.active {
+      background: var(--accent-cyan-dark);
+      color: #FFF;
+      border-color: var(--accent-cyan);
+    }
+
+    /* Stats & History View */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+      text-align: center;
+    }
+
+    .stat-box {
+      background: #0E182A;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .stat-val {
+      font-size: 17px;
+      font-weight: 800;
+      color: #FFF;
+    }
+
+    .stat-lbl {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .badge-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      background: #111B30;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      margin-bottom: 8px;
+    }
+
+    .badge-item.unlocked {
+      border-color: rgba(251, 191, 36, 0.4);
+      background: #142340;
+    }
+
+    .badge-icon {
+      font-size: 26px;
+    }
+
+    .badge-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #FFF;
+    }
+
+    .badge-desc {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    /* Utility */
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- Header -->
+  <header>
+    <div class="brand-title" onclick="showView('home')">
+      <div class="brand-logo">🌍</div>
+      <div class="brand-text">
+        <h1>CUET Geophysics</h1>
+        <p>Daily Streak & Exam Prep</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="streak-badge" onclick="showView('stats')" title="View Streak & Stats">
+        <span>🔥</span>
+        <span id="header-streak-text">0d</span>
+      </div>
+      <button class="btn-icon" onclick="showView('stats')" title="Analytics">📊</button>
+    </div>
+  </header>
+
+  <!-- Views -->
+  <main>
+    <!-- VIEW 1: HOME DASHBOARD -->
+    <section id="view-home" class="view">
+      <!-- Streak Hero Card -->
+      <div class="card streak-card">
+        <div class="streak-header">
+          <div class="streak-flame-wrapper">
+            <div class="flame-icon">🔥</div>
+            <div>
+              <div class="streak-count" id="home-streak-count">0 DAYS</div>
+              <div class="streak-label">Active Daily Streak</div>
+            </div>
+          </div>
+          <div class="streak-status-pill" id="home-streak-status">Pending Today</div>
+        </div>
+
+        <!-- 7-Day Consistency Tracker -->
+        <div class="week-dots">
+          <div class="day-col"><span class="day-name">M</span><div class="day-circle" id="dot-0">•</div></div>
+          <div class="day-col"><span class="day-name">T</span><div class="day-circle" id="dot-1">•</div></div>
+          <div class="day-col"><span class="day-name">W</span><div class="day-circle" id="dot-2">•</div></div>
+          <div class="day-col"><span class="day-name">T</span><div class="day-circle" id="dot-3">•</div></div>
+          <div class="day-col"><span class="day-name">F</span><div class="day-circle" id="dot-4">•</div></div>
+          <div class="day-col"><span class="day-name">S</span><div class="day-circle" id="dot-5">•</div></div>
+          <div class="day-col"><span class="day-name">S</span><div class="day-circle" id="dot-6">•</div></div>
+        </div>
+
+        <button class="streak-btn" onclick="startDailyQuiz()">
+          <span>⚡</span> Take Today's 5-Question Challenge
+        </button>
+      </div>
+
+      <!-- Quick Action Banners -->
+      <div class="action-grid">
+        <div class="action-card" onclick="startFullMock()">
+          <div class="action-icon">🎯</div>
+          <div class="action-title">Full Mock Exam</div>
+          <div class="action-subtitle">15 Questions • Timed</div>
+        </div>
+        <div class="action-card" onclick="showView('notes')">
+          <div class="action-icon">📖</div>
+          <div class="action-title">Study Notes</div>
+          <div class="action-subtitle">Formulas & Derivations</div>
+        </div>
+      </div>
+
+      <!-- Chapter Practice List -->
+      <div class="section-title">
+        <h2>Syllabus Chapters</h2>
+        <span>Practice Quizzes</span>
+      </div>
+
+      <!-- Chapter 1 -->
+      <div class="chapter-card" onclick="startChapterQuiz(1)">
+        <span class="chapter-badge c1">Chapter 1</span>
+        <div class="chapter-name">Foundations of Classical Mechanics</div>
+        <div class="chapter-desc">Galilean invariance, non-inertial frames, Coriolis & centrifugal forces, Foucault pendulum, Einstein's equivalence principle.</div>
+        <div class="chapter-footer">
+          <span>14 Verified Questions</span>
+          <span class="chapter-start-text">Start Quiz →</span>
+        </div>
+      </div>
+
+      <!-- Chapter 2 -->
+      <div class="chapter-card" onclick="startChapterQuiz(2)">
+        <span class="chapter-badge c2">Chapter 2</span>
+        <div class="chapter-name">Conservation Laws in Mechanics</div>
+        <div class="chapter-desc">Linear momentum, elastic & inelastic collisions, variable mass & Tsiolkovsky equation, conservative force fields, central forces.</div>
+        <div class="chapter-footer">
+          <span>9 Verified Questions</span>
+          <span class="chapter-start-text">Start Quiz →</span>
+        </div>
+      </div>
+
+      <!-- Chapter 3 -->
+      <div class="chapter-card" onclick="startChapterQuiz(3)">
+        <span class="chapter-badge c3">Chapter 3</span>
+        <div class="chapter-name">Rotational Dynamics</div>
+        <div class="chapter-desc">Moment of inertia (sphere, rod, cylinder, ring), parallel & perpendicular axes theorems, rolling down inclines, Lissajous figures, beats.</div>
+        <div class="chapter-footer">
+          <span>12 Verified Questions</span>
+          <span class="chapter-start-text">Start Quiz →</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: QUIZ SCREEN -->
+    <section id="view-quiz" class="view hidden">
+      <div class="quiz-meta">
+        <span id="quiz-chapter-indicator">Quiz</span>
+        <span class="timer-badge" id="quiz-timer">00:00</span>
+      </div>
+
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+      </div>
+
+      <div class="question-box">
+        <div class="topic-pill" id="question-topic">Topic</div>
+        <div class="question-text" id="question-text">Loading question...</div>
+      </div>
+
+      <div class="options-list" id="options-container">
+        <!-- Options generated dynamically -->
+      </div>
+
+      <!-- Explanation Card (reveals after picking answer) -->
+      <div class="explanation-card hidden" id="quiz-explanation-card">
+        <div class="explanation-badge">
+          <span>💡</span> <span id="explanation-title">Explanation & Derivation</span>
+        </div>
+        <div class="explanation-text" id="explanation-body"></div>
+        <div class="formula-takeaway" id="explanation-formula"></div>
+      </div>
+
+      <div class="quiz-bottom-bar">
+        <button class="btn-secondary" onclick="exitQuiz()">Exit</button>
+        <button class="btn-primary" id="btn-next-quiz" onclick="nextQuestion()">Next Question →</button>
+      </div>
+    </section>
+
+    <!-- VIEW 3: RESULTS SCREEN -->
+    <section id="view-results" class="view hidden">
+      <div class="card" style="text-align: center; padding: 24px 16px;">
+        <div style="font-size: 40px; margin-bottom: 8px;" id="result-emoji">🎉</div>
+        <h2 style="font-size: 20px; margin-bottom: 4px;" id="result-title">Quiz Completed!</h2>
+        <p style="color: var(--text-sub); font-size: 13px;" id="result-meta">Score Summary</p>
+
+        <div style="font-size: 48px; font-weight: 900; color: var(--accent-cyan); margin: 16px 0;" id="result-score">
+          0 / 0
+        </div>
+        <div style="font-size: 14px; font-weight: 700; color: #FFF; margin-bottom: 12px;" id="result-pct">0% Accuracy</div>
+        <p style="font-size: 12px; color: var(--text-sub); max-width: 400px; margin: 0 auto 20px auto;" id="result-feedback">
+          Great job practicing today!
+        </p>
+
+        <div style="display: flex; gap: 10px; justify-content: center;">
+          <button class="btn-secondary" onclick="retakeCurrentQuiz()">Retake</button>
+          <button class="btn-primary" onclick="showView('home')">Return Dashboard</button>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <h2>Review Answers & Formulas</h2>
+      </div>
+      <div id="results-review-list" style="display: flex; flex-direction: column; gap: 14px;">
+        <!-- Detailed answers and explanations will be injected here -->
+      </div>
+    </section>
+
+    <!-- VIEW 4: STUDY NOTES & FORMULA DIRECTORY -->
+    <section id="view-notes" class="view hidden">
+      <input type="text" class="search-input" id="notes-search" placeholder="Search formula, concept, or theorem..." oninput="filterNotes()" />
+
+      <div class="chip-scroll">
+        <div class="chip active" onclick="setNotesFilter(0, this)">All (35)</div>
+        <div class="chip" onclick="setNotesFilter(1, this)">Ch 1: Mechanics</div>
+        <div class="chip" onclick="setNotesFilter(2, this)">Ch 2: Conservation</div>
+        <div class="chip" onclick="setNotesFilter(3, this)">Ch 3: Rotation</div>
+      </div>
+
+      <div id="notes-container" style="display: flex; flex-direction: column; gap: 14px;">
+        <!-- Notes cards injected dynamically -->
+      </div>
+    </section>
+
+    <!-- VIEW 5: STATS & BADGES -->
+    <section id="view-stats" class="view hidden">
+      <div class="card" style="text-align: center;">
+        <div style="font-size: 38px;">🔥</div>
+        <div style="font-size: 32px; font-weight: 900; margin-top: 4px;" id="stats-current-streak">0 Days</div>
+        <div style="font-size: 12px; color: var(--accent-orange); font-weight: 700; text-transform: uppercase;">Current Daily Streak</div>
+
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-val" id="stats-best-streak">0d</div>
+            <div class="stat-lbl">Best Streak</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val" id="stats-total-quizzes">0</div>
+            <div class="stat-lbl">Quizzes</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val" id="stats-total-questions">0</div>
+            <div class="stat-lbl">Questions</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val" id="stats-accuracy">0%</div>
+            <div class="stat-lbl">Accuracy</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <h2>Geophysics Mastery Badges</h2>
+      </div>
+
+      <div id="badges-container">
+        <!-- Badges injected dynamically -->
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+  // Complete Question Bank (Exact CUET Geophysics Dataset)
+  const QUESTION_BANK = [
+    // CHAPTER 1
+    {
+      id: 1, chapter: 1, topic: "Galilean Transformation",
+      text: "Under a Galilean transformation, x' = x - vt, t' = t, which of the following physical quantities is NOT invariant?",
+      options: ["The acceleration of a particle, a", "The force between two particles, F₁₂", "The velocity of a particle, u", "The mass of a particle, m"],
+      correct: 2,
+      explanation: "Under Galilean transformation x' = x - vt and t' = t, taking time derivative gives u' = u - v. Hence velocity depends on the reference frame and is NOT invariant. Acceleration a' = a and force F' = ma' = F are invariant.",
+      formula: "u' = u - v (Frame-dependent) | a' = a, F' = F (Invariant)"
+    },
+    {
+      id: 2, chapter: 1, topic: "Inertial Frames",
+      text: "The statement that the laws of mechanics are the same in all inertial frames of reference is known as:",
+      options: ["The principle of equivalence", "Newton's first law", "The principle of Galilean relativity", "The principle of superposition"],
+      correct: 2,
+      explanation: "The Principle of Galilean Relativity asserts that Newton's laws of mechanics have the exact same mathematical form in every inertial reference frame. No internal experiment can detect uniform linear velocity.",
+      formula: "Principle of Relativity: Laws of mechanics have identical form in all inertial frames S and S'"
+    },
+    {
+      id: 3, chapter: 1, topic: "Galilean Transformation",
+      text: "A particle has velocity u in an inertial frame S. In another inertial frame S' moving with a constant velocity v relative to S along the x-axis, the velocity u' is given by:",
+      options: ["u' = u + v", "u' = u - v", "u' = v - u", "u' = √(u² - v²)"],
+      correct: 1,
+      explanation: "Starting with position r' = r - vt, differentiating with respect to t' = t yields dr'/dt = dr/dt - v, hence u' = u - v.",
+      formula: "u' = u - v"
+    },
+    {
+      id: 4, chapter: 1, topic: "Newton's Laws",
+      text: "If Newton's second law, F = ma, holds in an inertial frame S, what is the form of the law in a frame S' moving with constant velocity v relative to S?",
+      options: ["F' = ma' + m(dv/dt)", "F' = ma', where F' ≠ F", "F' = ma', where F' = F", "The law does not hold its form"],
+      correct: 2,
+      explanation: "Because S' moves with constant velocity v, dv/dt = 0. Therefore a' = a. Force F depends only on relative coordinates, so F' = F, giving F' = ma'.",
+      formula: "F = ma ⟺ F' = ma' (form-invariant)"
+    },
+    {
+      id: 5, chapter: 1, topic: "Relativity",
+      text: "Maxwell's equations of electromagnetism are NOT invariant under Galilean transformations. This fundamental inconsistency historically led to:",
+      options: ["Quantum Mechanics", "General Theory of Relativity", "Special Theory of Relativity", "Fluid Dynamics"],
+      correct: 2,
+      explanation: "Maxwell's equations predict light speed c is an invariant constant in vacuum. Galilean transformation predicted c' = c - v. Einstein reconciled this in 1905 with the Special Theory of Relativity via Lorentz transformations.",
+      formula: "Lorentz transformation: x' = γ(x - vt), t' = γ(t - vx/c²)"
+    },
+    {
+      id: 6, chapter: 1, topic: "Conservation Laws",
+      text: "Under Galilean transformation, the change in kinetic energy of a particle of mass m with initial velocity u in frame S, viewed from frame S' moving with velocity v, is ΔK = K' - K. What is ΔK?",
+      options: ["0", "½ m v²", "-m(u · v) + ½ m v²", "m(u · v)"],
+      correct: 2,
+      explanation: "K' = ½ m (u - v)² = ½ m (u² - 2 u · v + v²) = K - m(u · v) + ½ m v². Thus ΔK = -m(u · v) + ½ m v².",
+      formula: "K' = K - m(u · v) + ½ m v²"
+    },
+    {
+      id: 7, chapter: 1, topic: "Fictitious Forces",
+      text: "An observer in a train moving with constant linear acceleration a₀ observes a pendulum of mass m. What is the fictitious (pseudo) force acting on the pendulum bob?",
+      options: ["mg", "m a₀", "-m a₀", "0"],
+      correct: 2,
+      explanation: "In an accelerating reference frame with acceleration a₀, Newton's second law requires an inertial fictitious force F_pseudo = -m a₀ directed opposite to the frame's acceleration.",
+      formula: "F_fictitious = -m a₀"
+    },
+    {
+      id: 8, chapter: 1, topic: "Rotating Frames & Coriolis",
+      text: "The Coriolis force on a particle of mass m moving with velocity v_r relative to a frame rotating with angular velocity ω is given by:",
+      options: ["-m (ω × v_r)", "-2m (ω × v_r)", "-m ω × (ω × r)", "-2m (v_r × r)"],
+      correct: 1,
+      explanation: "The Coriolis force is F_c = -2m (ω × v_r). It deflects moving bodies to the right in the Northern Hemisphere and to the left in the Southern Hemisphere.",
+      formula: "F_Coriolis = -2m (ω × v_r)"
+    },
+    {
+      id: 9, chapter: 1, topic: "Rotating Frames",
+      text: "The centrifugal force on a particle of mass m at position vector r from the axis in a frame rotating with angular velocity ω is:",
+      options: ["-m (ω · r) ω", "-2m (ω × r)", "-m ω × (ω × r)", "-m (dω/dt) × r"],
+      correct: 2,
+      explanation: "The centrifugal force vector formula is F_cf = -m ω × (ω × r), pointing radially outward perpendicular to the rotation axis with magnitude m ω² r_⊥.",
+      formula: "F_centrifugal = -m ω × (ω × r) = m ω² r_⟂"
+    },
+    {
+      id: 10, chapter: 1, topic: "Geophysics & Earth Rotation",
+      text: "The Foucault pendulum provides direct experimental proof for:",
+      options: ["The Earth's revolution around the Sun", "The Earth's axial rotation", "The equivalence principle", "Gravitational wave propagation"],
+      correct: 1,
+      explanation: "A Foucault pendulum oscillates in a plane that rotates relative to the Earth due to Coriolis force. Period of plane rotation is T = 24 / sin(λ) hours, proving the Earth's axial rotation.",
+      formula: "T_Foucault = 24 / sin(λ) hours (North Pole: 24h, Equator: ∞)"
+    },
+    {
+      id: 11, chapter: 1, topic: "Equivalence Principle",
+      text: "The Weak Equivalence Principle (WEP) establishes the exact proportionality (equivalence) between:",
+      options: ["Inertial mass and rest energy", "Gravitational mass and inertial mass", "Active and passive charge", "Linear and angular momentum"],
+      correct: 1,
+      explanation: "WEP states inertial mass (m_i) and gravitational mass (m_g) are identical: m_i = m_g. Hence all objects fall at the same acceleration g in vacuum.",
+      formula: "m_inertial = m_gravitational ⟹ a = g (independent of material)"
+    },
+    {
+      id: 12, chapter: 1, topic: "Equivalence Principle",
+      text: "According to Einstein's elevator thought experiment, an observer in a closed elevator cannot distinguish between a uniform gravitational field g and:",
+      options: ["A uniform velocity v", "A uniform upward acceleration a = g in gravity-free space", "A uniform angular rotation", "A static electric field"],
+      correct: 1,
+      explanation: "In a closed room, downward gravity g produces identical physics to an upward acceleration a = g in deep space.",
+      formula: "Uniform gravity g ≡ Uniform acceleration a = -g"
+    },
+    {
+      id: 13, chapter: 1, topic: "Orbital Mechanics",
+      text: "The escape velocity v_e of a projectile of mass m from the surface of a spherical planet of mass M and radius R is:",
+      options: ["√(GM/R)", "√(2GM/R)", "2√(GM/R)", "GM/R²"],
+      correct: 1,
+      explanation: "Setting total energy = 0: ½ m v_e² - G M m / R = 0 ⟹ v_e = √(2GM/R) = √(2gR). For Earth, v_e ≈ 11.2 km/s.",
+      formula: "v_escape = √(2GM/R) = √(2gR) = √2 · v_orbital"
+    },
+    {
+      id: 14, chapter: 1, topic: "Coriolis Effect",
+      text: "A river flows from North to South in the Northern Hemisphere. Due to the Coriolis effect, which bank experiences greater erosion?",
+      options: ["The East bank (left bank)", "The West bank (right bank)", "Both banks equally", "Neither bank"],
+      correct: 1,
+      explanation: "In the Northern Hemisphere, Coriolis force deflects right of motion. Facing South, the right side is West. Hence the West bank is eroded more.",
+      formula: "Northern Hemisphere Coriolis deflection: Always to the RIGHT of motion"
+    },
+
+    // CHAPTER 2
+    {
+      id: 15, chapter: 2, topic: "Linear Momentum",
+      text: "The law of conservation of linear momentum for an isolated system is a direct mathematical consequence of the:",
+      options: ["Homogeneity of time", "Homogeneity of space (translational symmetry)", "Isotropy of space (rotational symmetry)", "Equivalence principle"],
+      correct: 1,
+      explanation: "By Noether's Theorem, spatial translational symmetry (homogeneity of space) yields conservation of linear momentum.",
+      formula: "Homogeneity of Space ⟹ Linear Momentum Conservation (Noether's Theorem)"
+    },
+    {
+      id: 16, chapter: 2, topic: "Elastic Collisions",
+      text: "A particle of mass m₁ moving with velocity u₁ collides head-on elastically with a stationary particle of mass m₂ (u₂ = 0). Under what condition is maximum kinetic energy transferred to m₂?",
+      options: ["m₁ >> m₂", "m₁ << m₂", "m₁ = m₂", "m₁ = 2 m₂"],
+      correct: 2,
+      explanation: "Fraction of kinetic energy transferred is ΔK/K₁ = 4m₁m₂ / (m₁ + m₂)². Maximizing this yields m₁ = m₂, transferring 100% of kinetic energy!",
+      formula: "Max KE transfer in elastic collision occurs when m₁ = m₂ (100% transfer)"
+    },
+    {
+      id: 17, chapter: 2, topic: "Inelastic Collisions",
+      text: "For a perfectly inelastic collision between two bodies, the coefficient of restitution e is:",
+      options: ["e = 1", "e = 0.5", "e = 0", "e = ∞"],
+      correct: 2,
+      explanation: "In perfectly inelastic collisions, bodies stick together and move with equal final velocities. Since separation speed = 0, e = 0.",
+      formula: "e = 1 (Elastic) | 0 < e < 1 (Inelastic) | e = 0 (Perfectly inelastic)"
+    },
+    {
+      id: 18, chapter: 2, topic: "Variable Mass Systems",
+      text: "A rocket operates in gravity-free space. If exhaust gases are ejected at constant relative speed v_e, what is Tsiolkovsky's rocket equation for final velocity v starting from rest with initial mass m₀ and final mass m_f?",
+      options: ["v = v_e (m₀ / m_f)", "v = v_e ln(m₀ / m_f)", "v = v_e ln(m_f / m₀)", "v = ½ v_e (m₀ / m_f)²"],
+      correct: 1,
+      explanation: "From m dv = -v_e dm, integrating gives v = v_e ln(m₀ / m_f).",
+      formula: "Δv = v_e ln(m₀ / m_f) (Tsiolkovsky Equation)"
+    },
+    {
+      id: 19, chapter: 2, topic: "Variable Mass & Thrust",
+      text: "A rocket burns fuel at a constant rate dm/dt = -λ with relative exhaust velocity v_e. What is the instantaneous thrust force exerted on the rocket?",
+      options: ["F_thrust = λ v_e", "F_thrust = ½ λ v_e²", "F_thrust = λ / v_e", "F_thrust = m λ v_e"],
+      correct: 0,
+      explanation: "Thrust is the reaction force from ejected propellant mass: F_thrust = v_rel |dm/dt| = λ v_e.",
+      formula: "F_thrust = v_e · |dm/dt|"
+    },
+    {
+      id: 20, chapter: 2, topic: "Conservative Forces",
+      text: "A force field F(r) is conservative if and only if which of the following conditions is satisfied?",
+      options: ["∇ · F = 0", "∇ × F = 0", "∂F/∂t ≠ 0", "∮ F · dr ≠ 0"],
+      correct: 1,
+      explanation: "A force field is conservative if work around any closed loop is zero: ∮ F · dr = 0. By Stokes' theorem, this is equivalent to ∇ × F = 0 (curl of F is zero), allowing F = -∇U.",
+      formula: "Conservative Force: ∇ × F = 0 ⟺ F = -∇U ⟺ ∮ F · dr = 0"
+    },
+    {
+      id: 21, chapter: 2, topic: "Central Force & Angular Momentum",
+      text: "In any central force field F(r) = f(r) r̂, which physical quantity is strictly conserved for an orbiting particle?",
+      options: ["Linear momentum only", "Kinetic energy only", "Total angular momentum L", "Potential energy only"],
+      correct: 2,
+      explanation: "Torque τ = r × F. In a central force field, F is parallel to r, so r × F = 0. Therefore dL/dt = 0, meaning angular momentum L is strictly conserved.",
+      formula: "τ = r × F = 0 ⟹ L = r × p = constant (Areal velocity dA/dt = const)"
+    },
+    {
+      id: 22, chapter: 2, topic: "Center of Mass Frame",
+      text: "In the Center of Mass (CM) reference frame of a two-particle system with masses m₁ and m₂, the total linear momentum is:",
+      options: ["(m₁ + m₂) v_cm", "m₁ v₁ + m₂ v₂", "Always zero", "Dependent on initial energy"],
+      correct: 2,
+      explanation: "By definition, the CM moves with velocity V_cm. In the CM frame, V'_cm = 0, so total momentum P'_total = 0 identically (zero-momentum frame).",
+      formula: "P_total(CM frame) = 0"
+    },
+    {
+      id: 23, chapter: 2, topic: "Work-Energy Theorem",
+      text: "A bomb of mass M at rest explodes into two pieces of masses m₁ and m₂. If their kinetic energies are K₁ and K₂ respectively, what is the ratio K₁ / K₂?",
+      options: ["m₁ / m₂", "m₂ / m₁", "(m₂ / m₁)²", "√(m₂ / m₁)" ],
+      correct: 1,
+      explanation: "Total momentum = 0 ⟹ |p₁| = |p₂| = p. Kinetic energy K = p² / (2m). Thus K₁ / K₂ = m₂ / m₁ (lighter fragment gets more energy).",
+      formula: "Equal momentum ⟹ K ∝ 1/m ⟹ K₁ / K₂ = m₂ / m₁"
+    },
+
+    // CHAPTER 3
+    {
+      id: 24, chapter: 3, topic: "Moment of Inertia",
+      text: "The moment of inertia of a uniform solid sphere of mass M and radius R about its diameter is:",
+      options: ["½ M R²", "⅔ M R²", "⅖ M R²", "¾ M R²"],
+      correct: 2,
+      explanation: "For a uniform solid sphere of mass M and radius R, I_diameter = (2/5) M R². For a hollow thin sphere it is (2/3) M R².",
+      formula: "I_solid_sphere = ⅖ MR² | I_hollow_sphere = ⅔ MR²"
+    },
+    {
+      id: 25, chapter: 3, topic: "Parallel Axis Theorem",
+      text: "The moment of inertia of a uniform solid sphere of mass M and radius R about a tangent axis is:",
+      options: ["⅖ M R²", "⅗ M R²", "⁷/₅ M R²", "⁹/₅ M R²"],
+      correct: 2,
+      explanation: "By parallel axis theorem, I_tangent = I_cm + M d² = (2/5) M R² + M R² = (7/5) M R².",
+      formula: "I_tangent = ⅖ MR² + MR² = ⁷/₅ MR²"
+    },
+    {
+      id: 26, chapter: 3, topic: "Radius of Gyration",
+      text: "A body of mass M has a moment of inertia I about a given axis. Its radius of gyration K is defined by:",
+      options: ["K = I / M", "K = √(I / M)", "K = √(M / I)", "K = I / M²"],
+      correct: 1,
+      explanation: "Radius of gyration K is the effective distance where the total mass M could be concentrated: I = M K² ⟹ K = √(I / M).",
+      formula: "K = √(I / M)"
+    },
+    {
+      id: 27, chapter: 3, topic: "Moments of Inertia",
+      text: "The moment of inertia of a thin uniform rod of mass M and length L about an axis perpendicular to the rod passing through its center is:",
+      options: ["ML² / 3", "ML² / 12", "ML² / 6", "ML² / 24"],
+      correct: 1,
+      explanation: "Integrating from -L/2 to +L/2 gives I_center = ML² / 12. About one end, using parallel axis theorem: ML²/12 + M(L/2)² = ML² / 3.",
+      formula: "I_rod_center = ML² / 12 | I_rod_end = ML² / 3"
+    },
+    {
+      id: 28, chapter: 3, topic: "Rolling Motion",
+      text: "A solid sphere, a solid cylinder, and a thin circular ring, each having the same mass M and outer radius R, roll down an inclined plane without slipping. In what order do they reach the bottom?",
+      options: ["Ring first, then cylinder, then sphere", "Sphere first, then cylinder, then ring", "All reach simultaneously", "Cylinder first, then sphere, then ring"],
+      correct: 1,
+      explanation: "Rolling acceleration a = g sin(θ) / (1 + K²/R²). Solid sphere has K²/R² = 0.4 (highest acceleration), cylinder has 0.5, ring has 1.0 (lowest). Thus sphere arrives first, then cylinder, then ring.",
+      formula: "a_rolling = g sin θ / (1 + K²/R²) ⟹ Sphere (0.4) > Cylinder (0.5) > Ring (1.0)"
+    },
+    {
+      id: 29, chapter: 3, topic: "Lissajous Figures",
+      text: "Two simple harmonic motions of equal frequency ω and amplitudes A and B act along perpendicular axes: x = A sin(ωt + δ) and y = B sin(ωt). If the phase difference δ = π/2, the resulting Lissajous figure is:",
+      options: ["A straight line with positive slope", "A parabola", "An ellipse with principal axes along the coordinate axes", "A figure of eight"],
+      correct: 2,
+      explanation: "When δ = π/2, x = A cos(ωt) and y = B sin(ωt), giving (x/A)² + (y/B)² = 1. This is an ellipse aligned with coordinate axes (circle if A = B).",
+      formula: "Equal frequency & δ = π/2 ⟹ Ellipse (Circle if A = B); δ = 0, π ⟹ Straight line"
+    },
+    {
+      id: 30, chapter: 3, topic: "Beats & Acoustics",
+      text: "Two tuning forks produce 4 beats per second. When the prong of one fork (frequency 256 Hz) is loaded with wax, the beat frequency decreases to 2 beats per second. What was the frequency of the other fork?",
+      options: ["252 Hz", "260 Hz", "254 Hz", "258 Hz"],
+      correct: 1,
+      explanation: "Beat frequency is |f₁ - f₂| = 4. Adding wax lowers f₁. If f₂ was 260 Hz, lowering f₁ would increase beat frequency. If f₂ was 252 Hz, lowering f₁ decreases beat frequency towards 252. Therefore f₂ = 252 Hz.",
+      formula: "f_beat = |f₁ - f₂| | Loading fork with wax DECREASES its frequency"
+    },
+    {
+      id: 31, chapter: 3, topic: "Rotational Kinetic Energy",
+      text: "A flywheel of moment of inertia 2.0 kg·m² rotates at an angular velocity of 30 rad/s. Its rotational kinetic energy is:",
+      options: ["60 J", "450 J", "900 J", "1800 J"],
+      correct: 2,
+      explanation: "Rotational kinetic energy K = ½ I ω² = ½ · 2.0 · (30)² = 900 J.",
+      formula: "K_rot = ½ I ω² = L² / (2I)"
+    },
+    {
+      id: 32, chapter: 3, topic: "Perpendicular Axis Theorem",
+      text: "The perpendicular axis theorem I_z = I_x + I_y is valid strictly for:",
+      options: ["Any 3D arbitrary solid body", "Spherically symmetric bodies only", "Planar laminar (two-dimensional) bodies only", "Cylinders and cones only"],
+      correct: 2,
+      explanation: "Perpendicular axis theorem requires all mass elements to lie in the plane where z = 0, so I_z = ∫(x²+y²)dm = I_x + I_y. It applies strictly to flat 2D laminas.",
+      formula: "I_z = I_x + I_y (Planar lamina only; z coordinate must be zero)"
+    },
+    {
+      id: 33, chapter: 1, topic: "Gravitational Redshift",
+      text: "When a light photon of initial frequency ν₀ climbs out of a gravitational potential well of depth GM/R, its observed frequency ν is:",
+      options: ["Higher (blue-shifted)", "Lower (red-shifted)", "Unchanged because light speed is constant", "Zero"],
+      correct: 1,
+      explanation: "As a photon climbs against gravity, it loses potential energy. Since E = hν, its frequency decreases (gravitational redshift).",
+      formula: "Δν / ν = -ΔΦ / c² = -g h / c² (Gravitational Redshift)"
+    },
+    {
+      id: 34, chapter: 2, topic: "Center of Mass",
+      text: "Two skaters with masses 40 kg and 60 kg hold opposite ends of a 10-meter light rope on frictionless ice. When they pull themselves together, how far does the 40 kg skater move before they meet?",
+      options: ["4.0 m", "5.0 m", "6.0 m", "10.0 m"],
+      correct: 2,
+      explanation: "No external forces act, so CM is stationary: m₁ Δx₁ = m₂ Δx₂. With Δx₁ + Δx₂ = 10, 40 Δx₁ = 60(10 - Δx₁) ⟹ Δx₁ = 6.0 m.",
+      formula: "m₁ Δx₁ = m₂ Δx₂ | Distance moved is inversely proportional to mass"
+    },
+    {
+      id: 35, chapter: 3, topic: "Circular Disc",
+      text: "The moment of inertia of a uniform circular disc of mass M and radius R about an axis in its plane passing through its diameter is:",
+      options: ["½ M R²", "¼ M R²", "¾ M R²", "M R²"],
+      correct: 1,
+      explanation: "For a circular disc, perpendicular axis gives I_z = I_x + I_y = 2 I_diameter. Since I_z = ½ MR², I_diameter = ¼ MR².",
+      formula: "I_disc_diameter = ¼ MR² | I_disc_perpendicular = ½ MR²"
+    }
+  ];
+
+  // App State & Local Storage
+  let userStats = {
+    currentStreak: 0,
+    maxStreak: 0,
+    lastPracticedDate: null,
+    totalQuizzes: 0,
+    totalQuestions: 0,
+    correctAnswers: 0,
+    recentHistory: []
+  };
+
+  function loadStats() {
+    try {
+      const saved = localStorage.getItem("cuet_geophysics_stats");
+      if (saved) {
+        userStats = JSON.parse(saved);
+      }
+    } catch(e) {}
+    updateStreakDisplay();
+  }
+
+  function saveStats() {
+    try {
+      localStorage.setItem("cuet_geophysics_stats", JSON.stringify(userStats));
+    } catch(e) {}
+    updateStreakDisplay();
+  }
+
+  function getTodayDateString() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+
+  function updateStreakDisplay() {
+    const today = getTodayDateString();
+    const isDoneToday = userStats.lastPracticedDate === today;
+
+    document.getElementById("header-streak-text").innerText = `${userStats.currentStreak}d`;
+    document.getElementById("home-streak-count").innerText = `${userStats.currentStreak} DAYS`;
+    
+    const statusPill = document.getElementById("home-streak-status");
+    if (isDoneToday) {
+      statusPill.innerText = "Completed Today ✓";
+      statusPill.classList.add("done");
+    } else {
+      statusPill.innerText = "Pending Today";
+      statusPill.classList.remove("done");
+    }
+
+    // Weekly consistency dots
+    const currentDay = (new Date().getDay() + 6) % 7; // Monday = 0
+    for (let i = 0; i < 7; i++) {
+      const dot = document.getElementById(`dot-${i}`);
+      if (dot) {
+        if (i < currentDay || (i === currentDay && isDoneToday)) {
+          dot.classList.add("active");
+        } else {
+          dot.classList.remove("active");
+        }
+      }
+    }
+
+    // Update Stats view
+    document.getElementById("stats-current-streak").innerText = `${userStats.currentStreak} Days`;
+    document.getElementById("stats-best-streak").innerText = `${userStats.maxStreak}d`;
+    document.getElementById("stats-total-quizzes").innerText = `${userStats.totalQuizzes}`;
+    document.getElementById("stats-total-questions").innerText = `${userStats.totalQuestions}`;
+    const acc = userStats.totalQuestions > 0 ? Math.round((userStats.correctAnswers / userStats.totalQuestions) * 100) : 0;
+    document.getElementById("stats-accuracy").innerText = `${acc}%`;
+
+    renderBadges();
+  }
+
+  function recordQuizCompletion(score, total) {
+    const today = getTodayDateString();
+    
+    // Check consecutive day
+    if (userStats.lastPracticedDate !== today) {
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth()+1).padStart(2,'0')}-${String(yesterday.getDate()).padStart(2,'0')}`;
+      
+      if (userStats.lastPracticedDate === yStr) {
+        userStats.currentStreak += 1;
+      } else {
+        userStats.currentStreak = 1;
+      }
+      userStats.lastPracticedDate = today;
+    }
+
+    if (userStats.currentStreak > userStats.maxStreak) {
+      userStats.maxStreak = userStats.currentStreak;
+    }
+
+    userStats.totalQuizzes += 1;
+    userStats.totalQuestions += total;
+    userStats.correctAnswers += score;
+
+    saveStats();
+  }
+
+  // Badges
+  function renderBadges() {
+    const container = document.getElementById("badges-container");
+    if (!container) return;
+
+    const badges = [
+      {
+        icon: "🚀", title: "Orbital Pioneer",
+        desc: "Complete your first CUET geophysics quiz session",
+        unlocked: userStats.totalQuizzes >= 1
+      },
+      {
+        icon: "🔥", title: "3-Day Fire",
+        desc: "Maintain a continuous 3-day daily streak",
+        unlocked: userStats.maxStreak >= 3
+      },
+      {
+        icon: "🧠", title: "Galilean Scholar",
+        desc: "Answer 10+ questions with >70% accuracy",
+        unlocked: userStats.totalQuestions >= 10 && (userStats.correctAnswers / userStats.totalQuestions >= 0.7)
+      },
+      {
+        icon: "👑", title: "7-Day Orbit Master",
+        desc: "Achieve a full 1-week continuous daily streak",
+        unlocked: userStats.maxStreak >= 7
+      }
+    ];
+
+    container.innerHTML = badges.map(b => `
+      <div class="badge-item ${b.unlocked ? 'unlocked' : ''}">
+        <div class="badge-icon">${b.icon}</div>
+        <div style="flex: 1;">
+          <div class="badge-title">${b.title} ${b.unlocked ? '✓' : '🔒'}</div>
+          <div class="badge-desc">${b.desc}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Navigation
+  function showView(viewId) {
+    document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
+    const target = document.getElementById(`view-${viewId}`);
+    if (target) target.classList.remove("hidden");
+    window.scrollTo(0, 0);
+
+    if (viewId === 'notes') renderNotes();
+    if (viewId === 'stats') updateStreakDisplay();
+  }
+
+  // Quiz Engine
+  let currentQuizTitle = "Quiz";
+  let currentQuizQuestions = [];
+  let currentQuizIndex = 0;
+  let userAnswers = {};
+  let quizStartTime = 0;
+  let timerInterval = null;
+
+  function startDailyQuiz() {
+    currentQuizTitle = "Daily Streak Challenge";
+    const shuffled = [...QUESTION_BANK].sort(() => 0.5 - Math.random());
+    currentQuizQuestions = shuffled.slice(0, 5);
+    initQuiz();
+  }
+
+  function startFullMock() {
+    currentQuizTitle = "Full CUET Mock Exam";
+    const shuffled = [...QUESTION_BANK].sort(() => 0.5 - Math.random());
+    currentQuizQuestions = shuffled.slice(0, 15);
+    initQuiz();
+  }
+
+  function startChapterQuiz(chNum) {
+    currentQuizTitle = `Chapter ${chNum} Practice`;
+    currentQuizQuestions = QUESTION_BANK.filter(q => q.chapter === chNum);
+    initQuiz();
+  }
+
+  function initQuiz() {
+    currentQuizIndex = 0;
+    userAnswers = {};
+    showView('quiz');
+    
+    clearInterval(timerInterval);
+    quizStartTime = Date.now();
+    timerInterval = setInterval(updateTimer, 1000);
+    updateTimer();
+
+    renderCurrentQuestion();
+  }
+
+  function updateTimer() {
+    const elapsed = Math.floor((Date.now() - quizStartTime) / 1000);
+    const m = Math.floor(elapsed / 60);
+    const s = elapsed % 60;
+    document.getElementById("quiz-timer").innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  }
+
+  function renderCurrentQuestion() {
+    const q = currentQuizQuestions[currentQuizIndex];
+    if (!q) return;
+
+    // Progress
+    const pct = ((currentQuizIndex + 1) / currentQuizQuestions.length) * 100;
+    document.getElementById("quiz-progress-fill").style.width = `${pct}%`;
+    document.getElementById("quiz-chapter-indicator").innerText = `${currentQuizTitle} • Q${currentQuizIndex + 1} of ${currentQuizQuestions.length}`;
+
+    // Question content
+    document.getElementById("question-topic").innerText = `Ch ${q.chapter} • ${q.topic}`;
+    document.getElementById("question-text").innerText = q.text;
+
+    // Options
+    const container = document.getElementById("options-container");
+    container.innerHTML = "";
+    const letters = ["(a)", "(b)", "(c)", "(d)"];
+    const isAnswered = userAnswers.hasOwnProperty(q.id);
+
+    q.options.forEach((opt, idx) => {
+      const btn = document.createElement("button");
+      btn.className = "option-btn";
+      btn.innerHTML = `<span class="option-letter">${letters[idx]}</span> <span>${opt}</span>`;
+      
+      if (isAnswered) {
+        btn.disabled = true;
+        if (idx === q.correct) btn.classList.add("correct");
+        if (userAnswers[q.id] === idx && idx !== q.correct) btn.classList.add("wrong");
+      } else {
+        btn.onclick = () => selectOption(q.id, idx);
+      }
+      container.appendChild(btn);
+    });
+
+    // Explanation Card
+    const expCard = document.getElementById("quiz-explanation-card");
+    if (isAnswered) {
+      expCard.classList.remove("hidden");
+      document.getElementById("explanation-title").innerText = `Correct Answer: ${letters[q.correct]}`;
+      document.getElementById("explanation-body").innerText = q.explanation;
+      document.getElementById("explanation-formula").innerText = `Takeaway: ${q.formula}`;
+    } else {
+      expCard.classList.add("hidden");
+    }
+
+    // Button text
+    const nextBtn = document.getElementById("btn-next-quiz");
+    if (currentQuizIndex === currentQuizQuestions.length - 1) {
+      nextBtn.innerText = "Submit Quiz ✓";
+      nextBtn.style.background = "var(--accent-orange)";
+    } else {
+      nextBtn.innerText = "Next Question →";
+      nextBtn.style.background = "var(--accent-cyan-dark)";
+    }
+  }
+
+  function selectOption(qId, optionIdx) {
+    if (userAnswers.hasOwnProperty(qId)) return;
+    userAnswers[qId] = optionIdx;
+    renderCurrentQuestion();
+  }
+
+  function nextQuestion() {
+    if (currentQuizIndex < currentQuizQuestions.length - 1) {
+      currentQuizIndex++;
+      renderCurrentQuestion();
+    } else {
+      finishQuiz();
+    }
+  }
+
+  function exitQuiz() {
+    if (confirm("Are you sure you want to exit? Your current progress will not be saved.")) {
+      clearInterval(timerInterval);
+      showView('home');
+    }
+  }
+
+  function finishQuiz() {
+    clearInterval(timerInterval);
+    let score = 0;
+    currentQuizQuestions.forEach(q => {
+      if (userAnswers[q.id] === q.correct) score++;
+    });
+
+    recordQuizCompletion(score, currentQuizQuestions.length);
+
+    // Populate Results
+    const total = currentQuizQuestions.length;
+    const pct = Math.round((score / total) * 100);
+    document.getElementById("result-score").innerText = `${score} / ${total}`;
+    document.getElementById("result-pct").innerText = `${pct}% Accuracy`;
+    document.getElementById("result-meta").innerText = `${currentQuizTitle} • Completed`;
+
+    if (pct >= 80) {
+      document.getElementById("result-emoji").innerText = "🏆";
+      document.getElementById("result-feedback").innerText = "Outstanding mastery! You have exceptional command over these CUET Geophysics concepts.";
+    } else if (pct >= 50) {
+      document.getElementById("result-emoji").innerText = "👍";
+      document.getElementById("result-feedback").innerText = "Good job! Review the step-by-step physical derivations and formulas below to solidify your knowledge.";
+    } else {
+      document.getElementById("result-emoji").innerText = "📚";
+      document.getElementById("result-feedback").innerText = "Keep practicing! Carefully study the detailed physics takeaways below to master these fundamentals.";
+    }
+
+    // Review list
+    const letters = ["(a)", "(b)", "(c)", "(d)"];
+    const reviewList = document.getElementById("results-review-list");
+    reviewList.innerHTML = currentQuizQuestions.map((q, idx) => {
+      const userChoice = userAnswers[q.id];
+      const isCorrect = userChoice === q.correct;
+      return `
+        <div class="card" style="padding: 16px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+            <span style="font-size: 11px; font-weight: 700; color: ${isCorrect ? 'var(--accent-green)' : 'var(--accent-red)'};">
+              Q${idx + 1} • ${isCorrect ? 'Correct ✓' : 'Incorrect ✗'}
+            </span>
+            <span style="font-size: 11px; color: var(--text-muted);">Ch ${q.chapter}</span>
+          </div>
+          <div style="font-size: 14px; font-weight: 600; color: #FFF; margin-bottom: 8px;">${q.text}</div>
+          <div style="font-size: 12px; color: var(--text-sub); margin-bottom: 8px;">
+            Your Answer: <b style="color: ${isCorrect ? 'var(--accent-green)' : 'var(--accent-red)'}">
+              ${userChoice !== undefined ? `${letters[userChoice]} ${q.options[userChoice]}` : 'Unanswered'}
+            </b>
+          </div>
+          <div class="explanation-card" style="margin-top: 8px;">
+            <div class="explanation-badge">💡 Correct: ${letters[q.correct]} ${q.options[q.correct]}</div>
+            <div class="explanation-text">${q.explanation}</div>
+            <div class="formula-takeaway">Takeaway: ${q.formula}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    showView('results');
+  }
+
+  function retakeCurrentQuiz() {
+    initQuiz();
+  }
+
+  // Study Notes
+  let currentNotesChapter = 0;
+  function setNotesFilter(ch, el) {
+    currentNotesChapter = ch;
+    document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+    el.classList.add("active");
+    renderNotes();
+  }
+
+  function filterNotes() {
+    renderNotes();
+  }
+
+  function renderNotes() {
+    const query = (document.getElementById("notes-search")?.value || "").toLowerCase().trim();
+    const container = document.getElementById("notes-container");
+    if (!container) return;
+
+    const filtered = QUESTION_BANK.filter(q => {
+      const matchCh = currentNotesChapter === 0 || q.chapter === currentNotesChapter;
+      const matchQuery = !query || 
+        q.text.toLowerCase().includes(query) ||
+        q.topic.toLowerCase().includes(query) ||
+        q.explanation.toLowerCase().includes(query) ||
+        q.formula.toLowerCase().includes(query);
+      return matchCh && matchQuery;
+    });
+
+    if (filtered.length === 0) {
+      container.innerHTML = `<div style="text-align: center; color: var(--text-sub); padding: 40px 0;">No matching formulas or questions found.</div>`;
+      return;
+    }
+
+    const letters = ["(a)", "(b)", "(c)", "(d)"];
+    container.innerHTML = filtered.map(q => `
+      <div class="card" style="padding: 16px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span class="topic-pill">Ch ${q.chapter} • ${q.topic}</span>
+        </div>
+        <div style="font-size: 14px; font-weight: 600; color: #FFF; margin-bottom: 10px;">${q.text}</div>
+        <div style="font-size: 13px; color: var(--text-sub); margin-bottom: 10px; display: flex; flex-direction: column; gap: 4px;">
+          ${q.options.map((opt, i) => `
+            <div style="color: ${i === q.correct ? 'var(--accent-cyan)' : 'var(--text-muted)'}; font-weight: ${i === q.correct ? '700' : '400'};">
+              ${letters[i]} ${opt} ${i === q.correct ? '✓' : ''}
+            </div>
+          `).join('')}
+        </div>
+        <div class="explanation-card">
+          <div class="explanation-badge">💡 Derivation & Explanation</div>
+          <div class="explanation-text">${q.explanation}</div>
+          <div class="formula-takeaway">Formula: ${q.formula}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Initialize on load
+  window.addEventListener("DOMContentLoaded", () => {
+    loadStats();
+  });
+</script>
+</body>
+</html>
